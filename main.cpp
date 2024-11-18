@@ -316,10 +316,19 @@ int main() {
                 timerTicker.attach(callback(&timerUpdate), 1);  // Update every 1 second
 
             case timer_running:
+                int total_seconds_initial = minutesInitial*60+secondsInitial;
+                int total_seconds_remaining = minutesRemaining*60+secondsRemaining;
+                int progress_width=map(float(total_seconds_remaining),0,float(total_seconds_initial),0,86);
                 if (lcdUpdateRequired){
                     lcd.cls();
-                    lcd.locate(30, 15);
-                    lcd.printf("Time left: %d:%02d\n", minutesRemaining, secondsRemaining);
+                    lcd.locate(0, 0);
+                    lcd.printf("00:00");
+                    lcd.locate(107,0);
+                    lcd.printf("%02d:%02d", minutesInitial, secondsInitial);
+                    lcd.locate(21, 22);
+                    lcd.printf("Remaining Time: %d:%02d\n", minutesRemaining, secondsRemaining);
+                    lcd.fillrect(21, 13, 21+progress_width, 18, 1);
+                    lcd.rect(21, 13, 21+86, 18, 1);
                     lcdUpdateRequired=false;
                 }
                 fire.fall(callback(&toggleTimer));
