@@ -323,7 +323,7 @@ int main() {
                     lcd.cls();
                     lcd.locate(0, 0);
                     lcd.printf("00:00");
-                    lcd.locate(107,0);
+                    lcd.locate(106,0);
                     lcd.printf("%02d:%02d", minutesInitial, secondsInitial);
                     lcd.locate(21, 22);
                     lcd.printf("Remaining Time: %d:%02d\n", minutesRemaining, secondsRemaining);
