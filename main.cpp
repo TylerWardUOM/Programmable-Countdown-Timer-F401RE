@@ -269,11 +269,32 @@ int main() {
             case start_timer:
                 led.setGreen();
                 state = timer_running;
+                    // Clear the display first
                 int x = 3;
                 while (x>0){
                     lcd.cls();
-                    lcd.locate(30, 15);
-                    lcd.printf("Starting in:\n\t%d",x);
+
+                    int x1 = 5, x2 = 25;  // Hourglass width
+                    int y1 = 5, y2 = 27;  // Hourglass height
+                    int midY = (y1 + y2) / 2;  // Midpoint of the hourglass (vertically aligned center)
+                    int midX= (x1+x2)/2;
+
+                    // Fill the top triangle (pointing down)
+                    for (int y = y1; y <= midY; y++) {
+                        int xStart = x1 + (y - y1);
+                        int xEnd = x2 - (y - y1);
+                        lcd.line(xStart, y, xEnd, y, 1);
+                    }
+
+                    // Draw the bottom half
+                    lcd.line(x2, y2, midX, midY, 1);  // right diagonal
+                    lcd.line(x1, y2, midX, midY, 1);  // left diagonal
+                    lcd.line(x1, y1, x2, y1, 1);    // Top horizontal
+                    lcd.line(x1, y2, x2, y2, 1);    // Bottom horizontal
+                    lcd.locate(50, 5);
+                    lcd.printf("Timer Starting");
+                    lcd.locate(75,15);
+                    lcd.printf("%d",x);
                     x--;
                     wait(1);
                 };
