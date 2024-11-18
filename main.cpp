@@ -1,7 +1,6 @@
 #include "mbed.h"
 #include "C12832.h"
 #include "RGBled.h"
-#include <ctime>
 
 
 
@@ -146,7 +145,7 @@ C12832 lcd(D11, D13, D12, D7, D10);  // LCD display
 RGBLed led(D5,D9,D8);  
 SamplingPotentiometer potentiometerLeft(A0,3.3,50);
 SamplingPotentiometer potentiometerRight(A1,3.3,50);
-
+Speaker speaker(D6);
 InterruptIn fire(D4);  // Interrupt for the center button on the joystick
 InterruptIn up(A2);
 InterruptIn down(A3);
@@ -224,6 +223,7 @@ int main() {
         switch (state) {
             case initialisation:
                 led.setRed();
+                speaker.stop();
                 if (lcdUpdateRequired){
                     lcd.locate(0, 0);
                     lcd.printf("Initialising");
@@ -356,6 +356,7 @@ int main() {
                     lcdUpdateRequired=false;
                 }
                 led.setBlue();
+                speaker.beep();
                 fire.fall(&quitTimer);
                 //update timer display then tranistion back to the timer running
                 break;
