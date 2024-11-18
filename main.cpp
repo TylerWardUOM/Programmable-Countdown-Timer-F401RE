@@ -243,12 +243,20 @@ int main() {
                 minutesRemaining=minutesInitial;
                 secondsRemaining=secondsInitial;
                 // Update the LCD to show the current set time
+                int minuteWidth = map(minutesRaw * 1000, 0, 1000, 0, 40); // Width (0 to screen width)
+                int secondWidth = map(secondsRaw * 1000, 0, 1000, 0, 40);
                 if (lcdUpdateRequired){
                     lcd.cls();  // Clear the display
-                    lcd.locate(0, 0);
-                    lcd.printf("Set Timer:");
-                    lcd.locate(0, 10);
-                    lcd.printf("%02d:%02d", minutesRemaining, secondsRemaining);  // Display the minutes and seconds
+                    lcd.fillrect(10, 13, 10+minuteWidth, 16, 1);  // Filled rectangle with dimensions based on pot value
+                    lcd.rect(10, 13, 50, 16, 1);
+                    lcd.locate(13, 19);
+                    lcd.printf("Minutes");
+                    lcd.fillrect(75, 13, 75+secondWidth, 16, 1);  // Filled rectangle with dimensions based on pot value
+                    lcd.rect(75, 13, 115, 16, 1);
+                    lcd.locate(78,19);
+                    lcd.printf("Seconds");
+                    lcd.locate(8, 0);
+                    lcd.printf("Set Timer Duration: %02d:%02d", minutesRemaining, secondsRemaining);
                     lcdUpdateRequired=false;
                 }
 
