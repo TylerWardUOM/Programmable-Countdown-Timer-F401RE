@@ -2,10 +2,17 @@
 class RGBLed{
     private:
         PwmOut red, green, blue;
+        bool state;
     public:
-        RGBLed(PinName r, PinName g, PinName b):red(r),green(g),blue(b){
+        RGBLed(PinName r, PinName g, PinName b):red(r),green(g),blue(b),state(false){
 
         };
+
+        void setOn(){
+            red = 0.0;
+            blue = 0.0;
+            green = 0.0;
+        }
 
         void setOff(){
             red = 1.0;
@@ -42,4 +49,10 @@ class RGBLed{
             blue = 0.0;
             green = 0.0;
         };
+
+        void setOrange(){
+            red = 0.0;
+            blue = 1;
+            green = 0.36;
+        }
 };
