@@ -233,13 +233,26 @@ int main() {
                 break;
 
             case set_duration:
+                float deadZoneThreshold = 0.994;  // Consider values greater than 0.95 as max (for 9 minutes and 59 seconds)
+
                 // Read the potentiometer values for minutes and seconds
                 float minutesRaw = potentiometerLeft.getCurrentSampleNorm();  // 0 to 1
-                float secondsRaw = potentiometerRight.getCurrentSampleNorm(); // 0 to 1
+                float secondsRaw = potentiometerRight.getCurrentSampleNorm(); // 0 to 1                
+                printf("minutes: %f Seconds: %f\n",minutesRaw,secondsRaw);
 
                 // Map the potentiometer values to minutes (0-9) and seconds (0-59)
-                minutesInitial = map(minutesRaw * 1000, 0, 1000, 0, 10);  // Left potentiometer mapped to 0-9 minutes
+                minutesInitial = map(minutesRaw * 1000, 0, 1000, 0, 9);  // Left potentiometer mapped to 0-9 minutes
                 secondsInitial = map(secondsRaw * 1000, 0, 1000, 0, 59);  // Right potentiometer mapped to 0-59 seconds
+
+                    // Apply the dead zone for minutes
+                if (minutesRaw >= deadZoneThreshold) {
+                    minutesInitial = 9;  // Set to max (9) if it's within the dead zone
+                }
+
+                // Apply the dead zone for seconds
+                if (secondsRaw >= deadZoneThreshold) {
+                    secondsInitial = 59;  // Set to max (59) if it's within the dead zone
+                }
                 minutesRemaining=minutesInitial;
                 secondsRemaining=secondsInitial;
                 // Update the LCD to show the current set time
