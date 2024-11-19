@@ -356,6 +356,7 @@ int main() {
                 }
                 led.setOrange();
                 timerTicker.detach();
+                ledTicker.detach();
                 up.fall(&restartTimer);
                 down.fall(&quitTimer);
                 fire.fall(callback(&toggleTimer));
@@ -370,6 +371,8 @@ int main() {
                 }
                 led.setBlue();
                 speaker.beep();
+                ledTicker.detach();
+                timerTicker.detach();
                 fire.fall(&quitTimer);
                 //update timer display then tranistion back to the timer running
                 break;
