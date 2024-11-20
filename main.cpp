@@ -216,6 +216,25 @@ void quitTimer(){
     state=initialisation;
 }
 
+void drawHourglass(){
+    lcd.cls();
+    int x1 = 5, x2 = 25;  // Hourglass width
+    int y1 = 5, y2 = 27;  // Hourglass height
+    int midY = (y1 + y2) / 2;  // Midpoint of the hourglass (vertically aligned center)
+    int midX= (x1+x2)/2;
+    // Fill the top triangle (pointing down)
+    for (int y = y1; y <= midY; y++) {
+        int xStart = x1 + (y - y1);
+        int xEnd = x2 - (y - y1);
+        lcd.line(xStart, y, xEnd, y, 1);
+    }
+    // Draw the bottom half
+    lcd.line(x2, y2, midX, midY, 1);  // right diagonal
+    lcd.line(x1, y2, midX, midY, 1);  // left diagonal
+    lcd.line(x1, y1, x2, y1, 1);    // Top horizontal
+    lcd.line(x1, y2, x2, y2, 1);    // Bottom horizontal
+}
+
 int main() {
     lcdUpdateTicker.attach(&updateLCD, 0.5);  // Update LCD every 500ms
 
@@ -286,24 +305,7 @@ int main() {
                 int x = 3;
                 while (x>0){
                     lcd.cls();
-
-                    int x1 = 5, x2 = 25;  // Hourglass width
-                    int y1 = 5, y2 = 27;  // Hourglass height
-                    int midY = (y1 + y2) / 2;  // Midpoint of the hourglass (vertically aligned center)
-                    int midX= (x1+x2)/2;
-
-                    // Fill the top triangle (pointing down)
-                    for (int y = y1; y <= midY; y++) {
-                        int xStart = x1 + (y - y1);
-                        int xEnd = x2 - (y - y1);
-                        lcd.line(xStart, y, xEnd, y, 1);
-                    }
-
-                    // Draw the bottom half
-                    lcd.line(x2, y2, midX, midY, 1);  // right diagonal
-                    lcd.line(x1, y2, midX, midY, 1);  // left diagonal
-                    lcd.line(x1, y1, x2, y1, 1);    // Top horizontal
-                    lcd.line(x1, y2, x2, y2, 1);    // Bottom horizontal
+                    drawHourglass();
                     lcd.locate(50, 5);
                     lcd.printf("Timer Starting");
                     lcd.locate(75,15);
@@ -350,8 +352,11 @@ int main() {
             case timer_paused:
                 if (lcdUpdateRequired){
                     lcd.cls();
-                    lcd.locate(30,15);
-                    lcd.printf("paused");
+                    lcd.rect(6, 5, 122, 27, 1);
+                    lcd.locate(25,8);
+                    lcd.printf("**TIMER PAUSED**");
+                    lcd.locate(8, 17);
+                    lcd.printf("U: Reset D: Quit F: Cont");
                     lcdUpdateRequired=false;
                 }
                 led.setOrange();
@@ -365,8 +370,9 @@ int main() {
             case time_elapsed:
                 if (lcdUpdateRequired){
                     lcd.cls();
-                    lcd.locate(30, 15);
-                    lcd.printf("Timer Finished");
+                    drawHourglass();
+                    lcd.locate(40, 10);
+                    lcd.printf("Timer Elapsed");
                     lcdUpdateRequired=false;
                 }
                 led.setBlue();
